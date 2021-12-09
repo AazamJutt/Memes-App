@@ -1,6 +1,7 @@
 package com.example.memeshareapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder> {
     List<Meme> memes;
-    Activity context;
+    Context context;
 
-    public MemeAdapter(Activity context, List<Meme> memes) {
+    public MemeAdapter(Context context, List<Meme> memes) {
         this.memes = memes;
         this.context = context;
     }
@@ -28,18 +29,16 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder
     @NonNull
     @Override
     public MemeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meme_post, parent, false);
-        MemeViewHolder holder = new MemeViewHolder(view);
-        return holder;
+        View view = LayoutInflater.from(context).inflate(R.layout.meme_post, parent, false);
+        return new MemeViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MemeViewHolder holder, int position) {
         Meme currMeme = memes.get(position);
-        holder.caption.setText(currMeme.getCaption());
-        holder.author.setText(currMeme.getAuthor());
-        if (position == memes.size() - 1)
-            Glide.with(context).load(currMeme.url).into(holder.meme);
+        holder.setAuthor(currMeme.getAuthor());
+        holder.setCaption(currMeme.getCaption());
+        holder.setImage(currMeme.getUrl());
     }
 
     @Override
@@ -51,18 +50,22 @@ public class MemeAdapter extends RecyclerView.Adapter<MemeAdapter.MemeViewHolder
         TextView author;
         TextView caption;
         ImageView meme;
-        ImageView likeBtn;
-        ImageView launchBtn;
-        ImageView shareBtn;
-
+        View view;
         public MemeViewHolder(@NonNull View memeView) {
             super(memeView);
-            author = memeView.findViewById(R.id.author);
-            caption = memeView.findViewById(R.id.caption);
-            meme = memeView.findViewById(R.id.memeImg);
-            likeBtn = memeView.findViewById(R.id.likeBtn);
-            launchBtn = memeView.findViewById(R.id.launchBtn);
-            shareBtn = memeView.findViewById(R.id.shareBtn);
+            this.view = memeView;
+        }
+        public void setAuthor(String author){
+            this.author = view.findViewById(R.id.author);
+            this.author.setText(author);
+        }
+        public void setCaption(String caption){
+            this.caption = view.findViewById(R.id.caption);
+            this.caption.setText(caption);
+        }
+        public void setImage(String url){
+            this.meme = view.findViewById(R.id.memeImg);
+            Glide.with(context).load(url).into(meme);
         }
     }
 }
