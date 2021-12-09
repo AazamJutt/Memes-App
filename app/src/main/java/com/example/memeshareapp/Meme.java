@@ -4,11 +4,21 @@ public class Meme {
     String url;
     String author;
     String caption;
+    String postLink;
 
-    public Meme(String author, String caption, String url) {
+    public Meme(String author, String caption, String url, String postLink) {
         this.author = author;
         this.caption = caption;
         this.url = url;
+        this.postLink = postLink;
+    }
+
+    public String getPostLink() {
+        return postLink;
+    }
+
+    public void setPostLink(String postLink) {
+        this.postLink = postLink;
     }
 
     public String getUrl() {
